@@ -1,0 +1,4 @@
+//para convertir mi codigo de js moderno a uno estandar4
+{
+    "presets": ["@babel/preset-env"]
+}
