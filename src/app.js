@@ -2,15 +2,17 @@ import express from "express";
 import morgan from "morgan";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-// const swaggerJsdoc = require("swagger-jsdoc");
-// const swaggerUi = require("swagger-ui-express");
 import router from "./routes/lenguajes.routes";
+import userRouter from "./routes/usuarios.routes";
 require("dotenv").config();
 const cors = require("cors");
 // import path from "path";
 const path = require("path");
 import config from "./config";
 
+const apiPath = {
+  usuarios: "/api/usuarios",
+};
 // Crear el servidor de express
 const app = express();
 
@@ -49,5 +51,6 @@ app.use(express.json());
 
 //ROUTE
 app.use(router);
+app.use(userRouter);
 
 export default app;

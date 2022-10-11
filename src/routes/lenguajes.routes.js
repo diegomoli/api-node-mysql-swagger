@@ -5,7 +5,8 @@ import {
   getLenguaje,
   getLenguajes,
   updateLenguaje,
-} from "../controller/lenguajes.controller";
+  // } from "../controller/lenguajes.controller";
+} from "../controller/language.controller";
 
 const router = Router();
 /**
@@ -29,6 +30,7 @@ const router = Router();
  *         name: Ruby
  *         programmers: 15
  */
+
 router.get("/api/lenguajes", getLenguajes);
 /**
  * @swagger
@@ -71,8 +73,8 @@ router.get("/api/lenguajes/:id", getLenguaje);
  *       404:
  *         description: Lenguaje no encontrado
  */
-router.post("/api/lenguajes", addLenguajes);
 
+router.post("/api/lenguajes", addLenguajes);
 /**
  * @swagger
  * /api/lenguajes:
@@ -116,6 +118,7 @@ router.delete("/api/lenguajes/:id", deleteLenguaje);
  *       404:
  *         description: Lenguaje no encontrado
  */
+
 router.put("/api/lenguajes/:id", updateLenguaje);
 /**
  * @swagger
@@ -148,4 +151,5 @@ router.put("/api/lenguajes/:id", updateLenguaje);
  *      500:
  *        description: Some error happened
  */
+
 export default router;

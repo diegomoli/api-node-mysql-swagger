@@ -1,4 +1,5 @@
 import { dbConnection } from "../dateBase/database";
+// import { dbConnection } from "../models/configServer";
 
 export const getLenguajes = async (req, res) => {
   try {
