@@ -8,7 +8,7 @@ import {
   // } from "../controller/lenguajes.controller";
 } from "../controller/language.controller";
 
-const router = Router();
+const routerLenguajes = Router();
 /**
  * @swagger
  * components:
@@ -31,7 +31,7 @@ const router = Router();
  *         programmers: 15
  */
 
-router.get("/api/lenguajes", getLenguajes);
+routerLenguajes.get("/api/lenguajes", getLenguajes);
 /**
  * @swagger
  * /api/lenguajes:
@@ -49,7 +49,7 @@ router.get("/api/lenguajes", getLenguajes);
  *                 $ref: '#/components/schemas/Lenguajes'
  */
 
-router.get("/api/lenguajes/:id", getLenguaje);
+routerLenguajes.get("/api/lenguajes/:id", getLenguaje);
 /**
  * @swagger
  * /api/lenguajes/{id}:
@@ -74,7 +74,7 @@ router.get("/api/lenguajes/:id", getLenguaje);
  *         description: Lenguaje no encontrado
  */
 
-router.post("/api/lenguajes", addLenguajes);
+routerLenguajes.post("/api/lenguajes", addLenguajes);
 /**
  * @swagger
  * /api/lenguajes:
@@ -97,7 +97,7 @@ router.post("/api/lenguajes", addLenguajes);
  *       500:
  *         description: Server Error
  */
-router.delete("/api/lenguajes/:id", deleteLenguaje);
+routerLenguajes.delete("/api/lenguajes/:id", deleteLenguaje);
 /**
  * @swagger
  * /api/lenguajes/{id}:
@@ -119,7 +119,7 @@ router.delete("/api/lenguajes/:id", deleteLenguaje);
  *         description: Lenguaje no encontrado
  */
 
-router.put("/api/lenguajes/:id", updateLenguaje);
+routerLenguajes.put("/api/lenguajes/:id", updateLenguaje);
 /**
  * @swagger
  * /api/lenguajes/{id}:
@@ -152,4 +152,4 @@ router.put("/api/lenguajes/:id", updateLenguaje);
  *        description: Some error happened
  */
 
-export default router;
+export default routerLenguajes;

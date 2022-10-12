@@ -2,17 +2,15 @@ import express from "express";
 import morgan from "morgan";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import router from "./routes/lenguajes.routes";
-import userRouter from "./routes/usuarios.routes";
 require("dotenv").config();
 const cors = require("cors");
 // import path from "path";
 const path = require("path");
 import config from "./config";
+import routerAuth from "./routes/auth.routes";
+import userRouter from "./routes/usuarios.routes";
+import routerLenguajes from "./routes/lenguajes.routes";
 
-const apiPath = {
-  usuarios: "/api/usuarios",
-};
 // Crear el servidor de express
 const app = express();
 
@@ -50,7 +48,8 @@ app.use(cors());
 app.use(express.json());
 
 //ROUTE
-app.use(router);
+app.use(routerAuth);
+app.use(routerLenguajes);
 app.use(userRouter);
 
 export default app;

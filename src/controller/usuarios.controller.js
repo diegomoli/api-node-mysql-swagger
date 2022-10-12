@@ -1,4 +1,6 @@
 import Usuario from "../models/usuario";
+import { genSaltSync, hashSync } from "bcryptjs";
+import { generarJWT } from "../helpers/jwt";
 
 export const getUsuarios = async (req, res) => {
   const usuarios = await Usuario.findAll();
@@ -17,25 +19,39 @@ export const getUsuario = async (req, res) => {
 };
 
 export const postUsuario = async (req, res) => {
-  const { body } = req;
-  console.log(body.email);
+  const { email, password } = req.body;
   try {
     const existeEmail = await Usuario.findOne({
       where: {
-        email: body.email,
+        email: email,
       },
     });
 
     if (existeEmail) {
       return res.status(400).json({
-        msg: `Ya existe un usuario con el email ${body.email}`,
+        msg: `Ya existe un usuario con el email ${email}`,
       });
     }
 
-    const usuario = Usuario.build(body);
+    let usuario = Usuario.build(req.body);
+
+    // Encriptar contraseña
+    const salt = genSaltSync();
+    usuario.password = hashSync(password, salt);
+
     await usuario.save();
 
-    res.json(usuario);
+    // Generar JWT
+    const token = await generarJWT(usuario.id, usuario.name);
+
+    res.status(201).json({
+      ok: true,
+      uid: usuario.id,
+      name: usuario.name,
+      email: usuario.email,
+      password: usuario.password,
+      token,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -45,29 +61,23 @@ export const postUsuario = async (req, res) => {
 };
 
 export const putUsuario = async (req, res) => {
-  const { body } = req;
+  const { password, ...resto } = req.body;
   const { id } = req.params;
+  const usuario = await Usuario.findByPk(id);
+  //En caso de actualizar la contraseña
+  if (password) {
+    const salt = genSaltSync();
+    resto.password = hashSync(password, salt);
+  }
 
   try {
-    const usuario = await Usuario.findByPk(id);
     if (!usuario) {
       res.status(404).json({
         msg: `No existe el usuario con el id ${id}`,
       });
     } else {
-      await usuario.update(body);
+      await usuario.update(resto);
     }
-    //    const existeEmail = await Usuario.findOne({
-    //         where: {
-    //             email: body.email
-    //         }
-    //     })
-
-    //     if (existeEmail) {
-    //         return res.status(400).json({
-    //             msg:`Ya existe un usuario con el email ${body.email}`
-    //         })
-    //     }
 
     res.json(usuario);
   } catch (error) {

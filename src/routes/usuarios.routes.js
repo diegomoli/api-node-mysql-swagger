@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { check } from "express-validator";
 import {
   deleteUsuario,
   getUsuario,
@@ -6,6 +7,7 @@ import {
   postUsuario,
   putUsuario,
 } from "../controller/usuarios.controller";
+import { validarCampos } from "../middlewares/validar-campos";
 
 const userRouter = Router();
 /**
@@ -41,12 +43,12 @@ const userRouter = Router();
  *           type: boolean
  *           description: estado en el que se encuentra el usuario
  *       example:
- *          usuario: diegomoli,
- *          password: 123456,
- *          email: diego@moli.com,
- *          name: Diego Nicolas,
- *          lastname: Molinelli,
- *          estado: true,
+ *          usuario: diegomoli
+ *          password: 123456a
+ *          email: diego@moli.com
+ *          name: Diego Nicolas
+ *          lastname: Molinelli
+ *
  */
 userRouter.get("/api/usuarios", getUsuarios);
 /**
@@ -90,7 +92,21 @@ userRouter.get("/api/usuarios/:id", getUsuario);
  *       404:
  *         description: Usuario no encontrado
  */
-userRouter.post("/api/usuarios", postUsuario);
+userRouter.post(
+  "/api/usuarios",
+  [
+    // middlewares
+    check("usuario", "El usuario es obligatorio").not().isEmpty(),
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("lastname", "El apellido es obligatorio").not().isEmpty(),
+    check("email", "El email es obligatorio").isEmail(),
+    check("password", "El password debe de ser de 6 caracteres").isLength({
+      min: 6,
+    }),
+    validarCampos,
+  ],
+  postUsuario
+);
 /**
  * @swagger
  * /api/usuarios:
