@@ -14,7 +14,6 @@ const routerAuth = Router();
  *         - email
  *         - password
  *       properties:
- *
  *         email:
  *           type: string
  *           description: correo del usuario

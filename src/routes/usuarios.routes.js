@@ -8,7 +8,8 @@ import {
   putUsuario,
 } from "../controller/usuarios.controller";
 import { validarCampos } from "../middlewares/validar-campos";
-
+import { validarJWT } from "../middlewares/validar-jwt";
+import { userID } from "../helpers/validator";
 const userRouter = Router();
 /**
  * @swagger
@@ -96,6 +97,7 @@ userRouter.post(
   "/api/usuarios",
   [
     // middlewares
+    // validarJWT,
     check("usuario", "El usuario es obligatorio").not().isEmpty(),
     check("name", "El nombre es obligatorio").not().isEmpty(),
     check("lastname", "El apellido es obligatorio").not().isEmpty(),
@@ -129,7 +131,7 @@ userRouter.post(
  *       500:
  *         description: Server Error
  */
-userRouter.delete("/api/usuarios/:id", deleteUsuario);
+userRouter.delete("/api/usuarios/:id", validarJWT, deleteUsuario);
 /**
  * @swagger
  * /api/usuarios/{id}:
@@ -150,7 +152,17 @@ userRouter.delete("/api/usuarios/:id", deleteUsuario);
  *       404:
  *         description: Usuario no encontrado
  */
-userRouter.put("/api/usuarios/:id", putUsuario);
+
+userRouter.put(
+  "/api/usuarios/:id",
+  [
+    // middlewares
+    check("id").custom(userID),
+    validarJWT,
+    validarCampos,
+  ],
+  putUsuario
+);
 /**
  * @swagger
  * /api/usuarios/{id}:
