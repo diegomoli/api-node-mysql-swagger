@@ -158,7 +158,7 @@ userRouter.put(
   [
     // middlewares
     check("id").custom(userID),
-    validarJWT,
+    // validarJWT,
     validarCampos,
   ],
   putUsuario
@@ -175,7 +175,7 @@ userRouter.put(
  *        schema:
  *          type: string
  *        required: true
- *        description: The book id
+ *        description: usuario por ID
  *    requestBody:
  *      required: true
  *      content:
