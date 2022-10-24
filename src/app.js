@@ -30,21 +30,22 @@ const swaggerSpec = {
         url: `http://${config.host}:${process.env.PORT}`,
       },
     ],
-    // components: {
-    securityDefinitions: {
-      bearerAuth: {
-        type: "apiKey",
-        name: "Authorization",
-        scheme: "bearer",
-        in: "header",
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "apiKey",
+          name: "x-token",
+          scheme: "bearer",
+          in: "header",
+          bearerFormat: "JWT",
+        },
       },
     },
-    // },
-    // security: [
-    //   {
-    //     bearerAuth: [],
-    //   },
-    // ],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
 
   apis: [`${path.join(__dirname, "./routes/*.js")}`],

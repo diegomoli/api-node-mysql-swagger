@@ -10,6 +10,7 @@ import {
 import { validarCampos } from "../middlewares/validar-campos";
 import { validarJWT } from "../middlewares/validar-jwt";
 import { userID } from "../helpers/validator";
+import { esAdminRole } from "../helpers/validar-roles";
 const userRouter = Router();
 /**
  * @swagger
@@ -131,7 +132,7 @@ userRouter.post(
  *       500:
  *         description: Server Error
  */
-userRouter.delete("/api/usuarios/:id", validarJWT, deleteUsuario);
+userRouter.delete("/api/usuarios/:id", validarJWT, esAdminRole, deleteUsuario);
 /**
  * @swagger
  * /api/usuarios/{id}:
@@ -158,7 +159,8 @@ userRouter.put(
   [
     // middlewares
     check("id").custom(userID),
-    // validarJWT,
+    validarJWT,
+    esAdminRole,
     validarCampos,
   ],
   putUsuario

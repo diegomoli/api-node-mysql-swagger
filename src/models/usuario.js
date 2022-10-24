@@ -7,6 +7,7 @@ const Usuario = db.define("Usuario", {
   email: { type: DataTypes.STRING },
   name: { type: DataTypes.STRING },
   lastname: { type: DataTypes.STRING },
+  rol: { type: DataTypes.STRING },
   estado: { type: DataTypes.BOOLEAN },
 });
 

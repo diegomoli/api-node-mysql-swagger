@@ -49,6 +49,7 @@ export const postUsuario = async (req, res) => {
       uid: usuario.id,
       name: usuario.name,
       email: usuario.email,
+      rol: usuario.rol,
       password: usuario.password,
       token,
     });
@@ -103,6 +104,11 @@ export const deleteUsuario = async (req, res) => {
     //Para la eliminacion fisica
     // await usuario.destroy();
   }
-
-  res.json(usuario);
+  const { usuario: user, email, estado } = usuario;
+  res.json({
+    user,
+    email,
+    estado,
+    msg: "Usuario eliminado con éxito",
+  });
 };
