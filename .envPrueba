@@ -1,0 +1,6 @@
+PORT=4000
+HOST=localhost
+DATABASE=restapinode
+USER=root
+PASSWORD=""
+SECRET_JWT_SEED=S%Cr%T@_321123

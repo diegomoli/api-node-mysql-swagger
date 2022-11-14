@@ -4,6 +4,7 @@ const { login } = require("../controller/auth.controller");
 const { validarCampos } = require("../middlewares/validar-campos");
 
 const routerAuth = Router();
+// *         - email
 /**
  * @swagger
  * components:
@@ -11,10 +12,10 @@ const routerAuth = Router();
  *     Login:
  *       type: object
  *       required:
- *         - email
- *         - password
+ *         - login
+ *         - pass
  *       properties:
- *         email:
+ *         login:
  *           type: string
  *           description: correo del usuario
  *         password:
@@ -27,8 +28,9 @@ const routerAuth = Router();
 routerAuth.post(
   "/api/login",
   [
-    check("email", "El correo es obligatorio").isEmail(),
-    check("password", "La contraseña es obligatoria").not().isEmpty(),
+    // check("email", "El correo es obligatorio").isEmail(),
+    check("login", "El usuario es obligatoria").not().isEmpty(),
+    check("pass", "La contraseña es obligatoria").not().isEmpty(),
     validarCampos,
   ],
   login

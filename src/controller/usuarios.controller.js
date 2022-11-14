@@ -1,11 +1,33 @@
 import Usuario from "../models/usuario";
 import { genSaltSync, hashSync } from "bcryptjs";
 import { generarJWT } from "../helpers/jwt";
+import { dbConnection } from "../dateBase/database";
 
 export const getUsuarios = async (req, res) => {
   const usuarios = await Usuario.findAll();
   res.json(usuarios);
+  // const usuarios = await Usuario.findAll()
+
+  //   .then((usuarios) => {
+  //     console.log(usuarios.toJSON());
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // res.json(usuarios);
 };
+
+// export const getUsuarios = async (req, res) => {
+//   try {
+//     const result = await dbConnection.query(
+//       "SELECT id, login, pass, estado, tipo, fk_personal FROM usuario_"
+//     );
+//     res.json("OK");
+//   } catch (error) {
+//     res.status(500);
+//     res.send(error.message);
+//   }
+// };
 
 export const getUsuario = async (req, res) => {
   const { id } = req.params;
