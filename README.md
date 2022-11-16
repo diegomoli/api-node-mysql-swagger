@@ -1,4 +1,8 @@
-# Compare Monedas
+# CRUD Base de datos Intranet
+
+## Iniciar XAMP
+
+Iniciar apache y mysql
 
 ## Instalar dependencias
 
@@ -11,7 +15,3 @@ npm run dev
 ### Compilar proyecto para producción
 
 npm run build
-
-### Api
-
-https://min-api.cryptocompare.com/documentation?key=Price&cat=multipleSymbolsFullPriceEndpoint
