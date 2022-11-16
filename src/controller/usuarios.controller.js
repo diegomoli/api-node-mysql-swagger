@@ -1,33 +1,12 @@
 import Usuario from "../models/usuario";
-import { genSaltSync, hashSync } from "bcryptjs";
+// import { genSaltSync, hashSync } from "bcryptjs";
 import { generarJWT } from "../helpers/jwt";
-import { dbConnection } from "../dateBase/database";
+import md5 from "md5";
 
 export const getUsuarios = async (req, res) => {
   const usuarios = await Usuario.findAll();
   res.json(usuarios);
-  // const usuarios = await Usuario.findAll()
-
-  //   .then((usuarios) => {
-  //     console.log(usuarios.toJSON());
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // res.json(usuarios);
 };
-
-// export const getUsuarios = async (req, res) => {
-//   try {
-//     const result = await dbConnection.query(
-//       "SELECT id, login, pass, estado, tipo, fk_personal FROM usuario_"
-//     );
-//     res.json("OK");
-//   } catch (error) {
-//     res.status(500);
-//     res.send(error.message);
-//   }
-// };
 
 export const getUsuario = async (req, res) => {
   const { id } = req.params;
@@ -41,38 +20,40 @@ export const getUsuario = async (req, res) => {
 };
 
 export const postUsuario = async (req, res) => {
-  const { email, password } = req.body;
+  const { login: login, pass } = req.body;
   try {
-    const existeEmail = await Usuario.findOne({
+    const existeUser = await Usuario.findOne({
       where: {
-        email: email,
+        login: login,
       },
     });
 
-    if (existeEmail) {
+    if (existeUser) {
       return res.status(400).json({
-        msg: `Ya existe un usuario con el email ${email}`,
+        msg: `Ya existe un usuario con el usuario ${login}`,
       });
     }
 
     let usuario = Usuario.build(req.body);
 
-    // Encriptar contraseña
-    const salt = genSaltSync();
-    usuario.password = hashSync(password, salt);
+    // Encriptar contraseña con bcryptjs
+    // const salt = genSaltSync();
+    // usuario.password = hashSync(password, salt);
 
+    // Encriptar contraseña con md5
+    usuario.pass = md5(pass);
     await usuario.save();
 
     // Generar JWT
-    const token = await generarJWT(usuario.id, usuario.name);
-
+    const token = await generarJWT(usuario.id, usuario.login);
     res.status(201).json({
       ok: true,
       uid: usuario.id,
-      name: usuario.name,
-      email: usuario.email,
-      rol: usuario.rol,
-      password: usuario.password,
+      login: usuario.login,
+      tipo: usuario.tipo,
+      estado: usuario.estado,
+      pass: usuario.pass,
+      fk_personal: usuario.fk_personal,
       token,
     });
   } catch (error) {
@@ -84,13 +65,19 @@ export const postUsuario = async (req, res) => {
 };
 
 export const putUsuario = async (req, res) => {
-  const { password, ...resto } = req.body;
+  const { pass, ...resto } = req.body;
   const { id } = req.params;
   const usuario = await Usuario.findByPk(id);
-  //En caso de actualizar la contraseña
-  if (password) {
-    const salt = genSaltSync();
-    resto.password = hashSync(password, salt);
+
+  //En caso de actualizar la contraseña con bcryptjs
+  // if (pass) {
+  //   const salt = genSaltSync();
+  //   resto.password = hashSync(password, salt);
+  // }
+
+  //En caso de actualizar la contraseña con md5
+  if (pass) {
+    resto.pass = md5(pass);
   }
 
   try {
@@ -113,7 +100,6 @@ export const putUsuario = async (req, res) => {
 
 export const deleteUsuario = async (req, res) => {
   const { id } = req.params;
-  const { body } = req;
 
   const usuario = await Usuario.findByPk(id);
   if (!usuario) {
@@ -126,10 +112,10 @@ export const deleteUsuario = async (req, res) => {
     //Para la eliminacion fisica
     // await usuario.destroy();
   }
-  const { usuario: user, email, estado } = usuario;
+  const { login, tipo, estado } = usuario;
   res.json({
-    user,
-    email,
+    login,
+    tipo,
     estado,
     msg: "Usuario eliminado con éxito",
   });

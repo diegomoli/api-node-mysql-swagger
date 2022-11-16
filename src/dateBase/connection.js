@@ -6,7 +6,6 @@ const { database, host, user, password } = config;
 const db = new Sequelize(database, user, password, {
   host: host,
   dialect: "mysql",
-  // dialect: "mariadb",
   // logging:false
   pool: {
     max: 5,

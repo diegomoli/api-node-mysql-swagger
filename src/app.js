@@ -9,7 +9,6 @@ const path = require("path");
 import config from "./config";
 import routerAuth from "./routes/auth.routes";
 import userRouter from "./routes/usuarios.routes";
-import routerLenguajes from "./routes/lenguajes.routes";
 
 // Crear el servidor de express
 const app = express();
@@ -66,7 +65,6 @@ app.use(express.json());
 
 //ROUTE
 app.use(routerAuth);
-app.use(routerLenguajes);
 app.use(userRouter);
 
 export default app;

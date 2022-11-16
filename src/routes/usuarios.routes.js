@@ -19,25 +19,28 @@ const userRouter = Router();
  *     Usuarios:
  *       type: object
  *       required:
- *         - usuario
- *         - password
- *         - email
- *         - name
- *         - lastname
+ *         - id
+ *         - login
+ *         - pass
+ *         - tipo
+ *         - fk_personal
  *         - estado
  *       properties:
- *         usuario:
+ *         id:
+ *           type: number
+ *           description: id del usuario
+ *         login:
  *           type: string
  *           description: usuario del usuario
- *         password:
+ *         pass:
  *           type: string
  *           description: password del usuario
- *         email:
- *           type: string
- *           description: email del usuario
- *         name:
- *           type: string
- *           description: nombre del usuario
+ *         fk_personal:
+ *           type: number
+ *           description: dni del usuario o legajo del socio
+ *         tipo:
+ *           type: number
+ *           description: rol del usuario (1:colaborador, 2:socio,...)
  *         lastname:
  *           type: string
  *           description: apellido del usuario
@@ -45,11 +48,12 @@ const userRouter = Router();
  *           type: boolean
  *           description: estado en el que se encuentra el usuario
  *       example:
- *          usuario: diegomoli
- *          password: 123456a
- *          email: diego@moli.com
- *          name: Diego Nicolas
- *          lastname: Molinelli
+ *          id: 5561
+ *          login: test
+ *          pass: 123456a
+ *          tipo: 1
+ *          fk_personal: 33554411
+ *          estado: 1
  *
  */
 userRouter.get("/api/usuarios", getUsuarios);
@@ -99,11 +103,10 @@ userRouter.post(
   [
     // middlewares
     // validarJWT,
-    check("usuario", "El usuario es obligatorio").not().isEmpty(),
-    check("name", "El nombre es obligatorio").not().isEmpty(),
-    check("lastname", "El apellido es obligatorio").not().isEmpty(),
-    check("email", "El email es obligatorio").isEmail(),
-    check("password", "El password debe de ser de 6 caracteres").isLength({
+    check("login", "El usuario es obligatorio").not().isEmpty(),
+    check("tipo", "El tipo es obligatorio").not().isEmpty(),
+    check("fk_personal", "El fk_personal es obligatorio").not().isEmpty(),
+    check("pass", "El password debe de ser de 6 caracteres").isLength({
       min: 6,
     }),
     validarCampos,
@@ -141,7 +144,7 @@ userRouter.delete("/api/usuarios/:id", validarJWT, esAdminRole, deleteUsuario);
  *     tags: [Usuarios]
  *     parameters:
  *       - in: path
- *         name: id
+ *         usuario: id
  *         schema:
  *           type: string
  *         required: true
@@ -173,7 +176,7 @@ userRouter.put(
  *    tags: [Usuarios]
  *    parameters:
  *      - in: path
- *        name: id
+ *        usuario: id
  *        schema:
  *          type: string
  *        required: true

@@ -1,26 +1,24 @@
-import { compareSync } from "bcryptjs";
+// import { compareSync } from "bcryptjs";
 import { response } from "express";
 import md5 from "md5";
 import { generarJWT } from "../helpers/jwt";
 import Usuario from "../models/usuario";
 
 const login = async (req, res = response) => {
-  // const { email: correo, password } = req.body;
   const { login: log, pass } = req.body;
   try {
-    // Verificar si el email existe
+    // Verificar si el usuario existe
     const usuario = await Usuario.findOne({
       where: {
-        // email: correo,
         login: log,
       },
     });
     if (!usuario) {
       return res.status(400).json({
-        msg: "Usuario / Password no son correctos - correo",
+        msg: "Usuario / Password no son correctos - user",
       });
     }
-    // SI el usuario está activo
+    // Si el usuario está activo
     console.log(usuario.estado);
     if (!usuario.estado) {
       return res.status(400).json({
@@ -29,8 +27,6 @@ const login = async (req, res = response) => {
     }
 
     // Verificar la contraseña
-    // const validPassword = compareSync(password, usuario.password);
-    console.log(md5(usuario.pass));
     // const validPassword = compareSync(pass, usuario.pass);
     // if (!validPassword) {
     //   return res.status(400).json({
@@ -44,12 +40,11 @@ const login = async (req, res = response) => {
     }
 
     // Generar el JWT
-    // const token = await generarJWT(usuario.id, usuario.name);
     const token = await generarJWT(usuario.id, usuario.login);
-    // const { usuario: user, id, name, lastname, email, estado, rol } = usuario;
-    const { usuario: login, id, estado, tipo, fk_personal } = usuario;
+    const { login, id, estado, tipo, fk_personal } = usuario;
     res.json({
       id,
+      login,
       tipo,
       estado,
       fk_personal,

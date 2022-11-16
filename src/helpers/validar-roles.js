@@ -8,11 +8,11 @@ const esAdminRole = (req, res = response, next) => {
     });
   }
 
-  const { rol, name } = req.usuario;
-
-  if (rol !== "admin") {
+  const { tipo, login } = req.usuario;
+  //Reemplazo el rol por el tipo ya que no tengo perfil administrativo
+  if (tipo !== 1) {
     return res.status(401).json({
-      msg: `${name} no es administrador - No puede hacer esto`,
+      msg: `${login} no es colaborador - No puede hacer esto`,
     });
   }
 
